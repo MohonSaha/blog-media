@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { TbFidgetSpinner } from "react-icons/tb";
 
 const PostBlog = () => {
   const { user } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Upload Image");
 
   const openModal = () => {
     setShowModal(true);
@@ -14,16 +17,18 @@ const PostBlog = () => {
     setShowModal(false);
   };
 
-  const [content, setContent] = useState("");
-
-  const handleInputChange = (e) => {
-    setContent(e.target.value);
+  const handlePostSubmit = (event) => {
+    // Handle submit post
+    event.preventDefault();
+    setLoading(true);
+    const target = event.target;
+    const image = target.image.files[0];
+    const content = target.content.value;
+    console.log(image, content);
   };
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Content saved:", content);
-    closeModal();
+  const handleImageChange = (image) => {
+    setButtonText(image.name);
   };
 
   return (
@@ -52,90 +57,105 @@ const PostBlog = () => {
       <>
         {showModal && (
           <div className="fixed z-10 inset-0 overflow-y-auto">
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div className="fixed inset-0 transition-opacity">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-              </div>
-              <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
-              •
-              <div
-                className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-headline"
-              >
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <img
-                        className="h-10 w-12 rounded-full border-2"
-                        src={user?.photoURL}
-                        alt=""
-                      />
-                    </div>
-
-                    <div className="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <h3
-                        className="text-lg leading-6 font-medium text-gray-900"
-                        id="modal-headline"
-                      >
-                        Mohon Saha
-                      </h3>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Modal content goes here.
-                        </p>
+            <form onSubmit={handlePostSubmit}>
+              <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div className="fixed inset-0 transition-opacity">
+                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+                •
+                <div
+                  className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="modal-headline"
+                >
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <img
+                          className="h-10 w-12 rounded-full border-2"
+                          src={user?.photoURL}
+                          alt=""
+                        />
                       </div>
 
-                      <div className="mt-4 space-y-4">
-                        <div className=" p-4 bg-white w-full  m-auto rounded-lg">
-                          <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
-                            <div className="flex flex-col w-max mx-auto text-center">
-                              <label>
-                                <input
-                                  className="text-sm cursor-pointer w-36 hidden"
-                                  type="file"
-                                  name="image"
-                                  id="image"
-                                  accept="image/*"
-                                  hidden
-                                />
-                                <div className="bg-green-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-green-500">
-                                  Upload Image
-                                </div>
-                              </label>
-                            </div>
-                          </div>
+                      <div className="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3
+                          className="text-lg leading-6 font-medium text-gray-900"
+                          id="modal-headline"
+                        >
+                          Mohon Saha
+                        </h3>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            Modal content goes here.
+                          </p>
                         </div>
 
-                        <textarea
-                          className="resize-none border rounded-md w-full py-2 px-3 h-32"
-                          placeholder="Enter some content..."
-                          value={content}
-                          onChange={handleInputChange}
-                        />
+                        {/* start post form */}
+                        <div className="mt-4 space-y-4">
+                          <div className=" p-4 bg-white w-full  m-auto rounded-lg">
+                            <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
+                              <div className="flex flex-col w-max mx-auto text-center">
+                                <label>
+                                  <input
+                                    onChange={(event) => {
+                                      handleImageChange(event.target.files[0]);
+                                    }}
+                                    className="text-sm cursor-pointer w-36 hidden"
+                                    type="file"
+                                    name="image"
+                                    id="image"
+                                    accept="image/*"
+                                    hidden
+                                  />
+                                  <div className="bg-green-600 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-green-500">
+                                    {/* Upload Image */}
+                                    {buttonText}
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <textarea
+                            className="resize-none border rounded-md w-full py-2 px-3 h-32"
+                            required
+                            name="content"
+                            placeholder="Enter some content..."
+                            //   value={content}
+                            //   onChange={handleInputChange}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    Post
-                  </button>
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    Discard
-                  </button>
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      {loading ? (
+                        <TbFidgetSpinner
+                          size={24}
+                          className="mx-auto animate-spin"
+                        />
+                      ) : (
+                        "Post"
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Discard
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         )}
       </>
