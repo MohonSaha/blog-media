@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { TbFidgetSpinner } from "react-icons/tb";
+import { imageUpload } from "../../../api/imgUpload";
+import { addBlog } from "../../../api/blogs";
 
 const PostBlog = () => {
   const { user } = useContext(AuthContext);
@@ -24,7 +26,40 @@ const PostBlog = () => {
     const target = event.target;
     const image = target.image.files[0];
     const content = target.content.value;
-    console.log(image, content);
+
+    // upload image
+    imageUpload(image)
+      .then((data) => {
+        const contentData = {
+          image: data.data.display_url,
+          content,
+          uploadTime: new Date(),
+          host: {
+            name: user?.displayName,
+            image: user?.photoURL,
+            email: user?.email,
+          },
+        };
+
+        // post blog data in the server
+        addBlog(contentData)
+          .then((data) => {
+            data;
+          })
+          .catch((err) => console.log(err));
+
+        // console.log(contentData);
+        // Simulate a delay for demonstration purposes
+        setTimeout(() => {
+          setLoading(false);
+          closeModal(); // Close the modal after successful submission
+        }, 200);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+      });
   };
 
   const handleImageChange = (image) => {
@@ -45,7 +80,7 @@ const PostBlog = () => {
               type="search"
               readOnly
               onClick={openModal}
-              placeholder={`What's on your mind, ${user?.userName} ?`}
+              placeholder={`What's on your mind ${user?.displayName} ?`}
               className="text-left w-full px-3 py-2 border rounded-full border-gray-300 focus:outline-gray-400 bg-gray-200 text-gray-900 cursor-pointer"
               data-temp-mail-org="0"
             />
@@ -56,7 +91,7 @@ const PostBlog = () => {
       {/* Modal area is here */}
       <>
         {showModal && (
-          <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="fixed z-10 inset-0 overflow-y-scroll">
             <form onSubmit={handlePostSubmit}>
               <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div className="fixed inset-0 transition-opacity">
@@ -72,7 +107,7 @@ const PostBlog = () => {
                 >
                   <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-600 sm:mx-0 sm:h-10 sm:w-10">
                         <img
                           className="h-10 w-12 rounded-full border-2"
                           src={user?.photoURL}
@@ -120,7 +155,7 @@ const PostBlog = () => {
                           </div>
 
                           <textarea
-                            className="resize-none border rounded-md w-full py-2 px-3 h-32"
+                            className="resize-none border rounded-md w-full py-2 px-3 md:h-32 h-16"
                             required
                             name="content"
                             placeholder="Enter some content..."
@@ -134,6 +169,7 @@ const PostBlog = () => {
                   <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button
                       type="submit"
+                      //   onClick={closeModal}
                       className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                     >
                       {loading ? (

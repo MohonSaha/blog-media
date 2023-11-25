@@ -25,7 +25,7 @@ const Card = ({ blog }) => {
               transition
             "
             src={image}
-            alt="Room"
+            alt="blog"
           />
           {/* <div
             className="
