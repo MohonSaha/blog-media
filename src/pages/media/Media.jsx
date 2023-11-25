@@ -23,7 +23,7 @@ const Media = () => {
   }
 
   return (
-    <div className="px-4 md:px-24 py-40 bg-slate-200/40">
+    <div className="px-4 md:px-32 py-10 bg-slate-200/40">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {blogs.map((blog, index) => (
           <Card key={index} blog={blog}></Card>
