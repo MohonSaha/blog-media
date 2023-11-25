@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
@@ -9,20 +9,58 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile, setLoading } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit = (data) => {
-    createUser(data.email, data.password).then((result) => {
-      const loggedUser = result.user;
-      console.log(loggedUser);
-      Swal.fire({
-        title: "Good job!",
-        text: "User created successfully!",
-        icon: "success",
+    console.log(data);
+    // image upload
+    // Create a data packet for imgbb:
+    const image = data.image[0];
+    const formData = new FormData();
+    formData.append("image", image);
+
+    // Send the packet data to imgbb:
+    const url = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_IMGBB_KEY
+    }`;
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((imageData) => {
+        const imageUrl = imageData.data.display_url;
+        // Send data in the firebase
+        createUser(data.email, data.password).then((result) => {
+          const loggedUser = result.user;
+          console.log(loggedUser);
+          // Update profile in firebase
+          //   updateUserProfile();
+
+          updateUserProfile(data.name, imageUrl)
+            .then(() => {
+              Swal.fire({
+                title: "Good job!",
+                text: "User created successfully!",
+                icon: "success",
+              });
+              navigate(from, { replace: true });
+            })
+            .catch((err) => {
+              console.log(err.message);
+              setLoading(false);
+            });
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-    });
   };
 
   return (

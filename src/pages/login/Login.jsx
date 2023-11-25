@@ -3,9 +3,11 @@ import { FcGoogle } from "react-icons/fc";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
+import { TbFidgetSpinner } from "react-icons/tb";
 
 const Login = () => {
-  const { signIn } = useContext(AuthContext);
+  const { signIn, signInWithGoogle, loading, setLoading } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -29,6 +31,20 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  // handel google sign in
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        const gLoggedUser = result.uesr;
+        console.log(gLoggedUser);
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error.message);
       });
   };
 
@@ -84,7 +100,11 @@ const Login = () => {
               type="submit"
               className="bg-orange-600 w-full rounded-md py-3 text-white"
             >
-              Continue
+              {loading ? (
+                <TbFidgetSpinner size={24} className="mx-auto animate-spin" />
+              ) : (
+                "Continue"
+              )}
             </button>
           </div>
         </form>
@@ -100,7 +120,10 @@ const Login = () => {
           </p>
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
-        <div className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
+        <div
+          onClick={handleGoogleSignIn}
+          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+        >
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
