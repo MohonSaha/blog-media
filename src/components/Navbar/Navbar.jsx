@@ -39,13 +39,13 @@ const Navbar = () => {
   const navItems = [
     { link: "Home", path: "/" },
     { link: "Media", path: "/media" },
-    { link: "Message", path: "/sell-a-book" },
+    { link: "Message", path: "/details" },
     { link: "About", path: "/about" },
     { link: "Blog", path: "/blog" },
   ];
 
   return (
-    <header className="w-full bg-transparent fixed top-0 left-0 right-0 ">
+    <header className="w-full bg-transparent fixed top-0 left-0 right-0 z-50">
       <nav className="text-white bg-black">
         <div className="flex items-center font-medium justify-around">
           <div className="flex items-center justify-between z-50 md:w-auto w-full p-5 md:p-0">
@@ -85,7 +85,20 @@ const Navbar = () => {
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white  hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  bg-orange-500"
                 onClick={toggleDropdown}
               >
-                Account
+                {user ? (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <p>Account</p>
+                      <img
+                        className="h-7 w-7 rounded-full ml-4"
+                        src={user?.photoURL}
+                        alt=""
+                      />
+                    </div>
+                  </>
+                ) : (
+                  "Account"
+                )}
               </button>
 
               {isOpen && (
@@ -98,12 +111,19 @@ const Navbar = () => {
                   >
                     {user ? (
                       <>
+                        <Link
+                          to="/about"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                          role="menuitem"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Profile
+                        </Link>
                         <button
                           onClick={() => {
                             handleLogout(), setIsOpen(false);
                           }}
-                          // onClick={() => setIsOpen(false)}
-                          className=" w-40 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                          className="text-left w-40 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         >
                           Logout
                         </button>

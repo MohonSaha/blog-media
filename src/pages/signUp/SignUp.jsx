@@ -9,7 +9,6 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
   const { createUser, updateUserProfile, setLoading } = useContext(AuthContext);

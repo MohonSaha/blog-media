@@ -5,6 +5,7 @@ import Login from "../pages/login/Login";
 import SignUp from "../pages/signUp/SignUp";
 import Media from "../pages/media/Media";
 import PrivateRoute from "./PrivateRoute";
+import BlogDetails from "../pages/blogDetails/BlogDetails";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Media />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/blog/:id",
+        element: (
+          <PrivateRoute>
+            <BlogDetails />
           </PrivateRoute>
         ),
       },
