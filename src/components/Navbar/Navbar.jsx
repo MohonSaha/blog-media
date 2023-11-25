@@ -1,13 +1,25 @@
 import { Link } from "react-router-dom";
-import NavLinks from "./NavLinks";
 import Button from "../Button.jsx";
 import { IoClose, IoMenu } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaBlog } from "react-icons/fa";
+import { AuthContext } from "../../providers/AuthProvider.jsx";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
   // To show the navbar shadow after scroll
   useEffect(() => {
@@ -26,21 +38,15 @@ const Navbar = () => {
 
   const navItems = [
     { link: "Home", path: "/" },
-    { link: "Shop", path: "/shop" },
-    { link: "Sell Your Book", path: "/sell-a-book" },
+    { link: "Media", path: "/media" },
+    { link: "Message", path: "/sell-a-book" },
     { link: "About", path: "/about" },
     { link: "Blog", path: "/blog" },
   ];
 
   return (
     <header className="w-full bg-transparent fixed top-0 left-0 right-0 ">
-      <nav
-        className={`  ${
-          sticky
-            ? "sticky top-0 left-0 right-0 transition-all ease-in duration-300 bg-white"
-            : "text-white"
-        } `}
-      >
+      <nav className="text-white bg-black">
         <div className="flex items-center font-medium justify-around">
           <div className="flex items-center justify-between z-50 md:w-auto w-full p-5 md:p-0">
             <div className="flex items-center">
@@ -69,10 +75,63 @@ const Navbar = () => {
                 <Link to={path}>{link}</Link>
               </li>
             ))}
-            <NavLinks />
+            {/* <NavLinks /> */}
           </ul>
           <div className="md:block hidden">
-            <Button></Button>
+            {/* Dropdown menu */}
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white  hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  bg-orange-500"
+                onClick={toggleDropdown}
+              >
+                Account
+              </button>
+
+              {isOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl  bg-white ring-2 ring-black ring-opacity-5">
+                  <div
+                    className="py-1"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    {user ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            handleLogout(), setIsOpen(false);
+                          }}
+                          // onClick={() => setIsOpen(false)}
+                          className=" w-40 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        >
+                          Logout
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                          role="menuitem"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                          role="menuitem"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Registration
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Mobile Nav */}
@@ -92,7 +151,7 @@ const Navbar = () => {
                 <Link to={path}>{link}</Link>
               </li>
             ))}
-            <NavLinks />
+            {/* <NavLinks /> */}
             <div className="py-5">
               <Button></Button>
             </div>
