@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import { TbFidgetSpinner } from "react-icons/tb";
+import { saveUser } from "../../api/auth";
 
 const Login = () => {
   const { signIn, signInWithGoogle, loading, setLoading } =
@@ -40,6 +41,8 @@ const Login = () => {
       .then((result) => {
         const gLoggedUser = result.uesr;
         console.log(gLoggedUser);
+        // saved user in db
+        saveUser(result.user);
         navigate(from, { replace: true });
       })
       .catch((error) => {

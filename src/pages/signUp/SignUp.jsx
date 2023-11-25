@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
+import { saveUser } from "../../api/auth";
 
 const SignUp = () => {
   const {
@@ -11,7 +12,8 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { createUser, updateUserProfile, setLoading } = useContext(AuthContext);
+  const { createUser, updateUserProfile, setLoading, signInWithGoogle } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -40,7 +42,6 @@ const SignUp = () => {
           const loggedUser = result.user;
           console.log(loggedUser);
           // Update profile in firebase
-          //   updateUserProfile();
 
           updateUserProfile(data.name, imageUrl)
             .then(() => {
@@ -49,6 +50,8 @@ const SignUp = () => {
                 text: "User created successfully!",
                 icon: "success",
               });
+              // ========== save user to db
+              saveUser(result.user);
               navigate(from, { replace: true });
             })
             .catch((err) => {
@@ -59,6 +62,22 @@ const SignUp = () => {
       })
       .catch((err) => {
         console.log(err.message);
+      });
+  };
+
+  // handel google sign in
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        const gLoggedUser = result.user;
+        console.log(gLoggedUser);
+        // ============ saved user in db
+        saveUser(result.user);
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error.message);
       });
   };
 
@@ -172,7 +191,10 @@ const SignUp = () => {
           </p>
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
-        <div className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
+        <div
+          onClick={handleGoogleSignIn}
+          className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+        >
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
