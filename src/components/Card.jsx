@@ -1,14 +1,11 @@
-// import HeartButton from "./HeartButton";
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
+
 import { AiFillHeart } from "react-icons/ai";
-import { FaComment, FaShareAltSquare, FaTrash } from "react-icons/fa";
-import { MdEditSquare } from "react-icons/md";
-import { AuthContext } from "../providers/AuthProvider";
+import { FaComment, FaShareAltSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const Card = ({ blog }) => {
-  const { title, published_date, totalReact, image, content } = blog;
-  const { user } = useContext(AuthContext);
+  const { uploadTime, totalReact, image, content, host } = blog;
 
   // eslint-disable-next-line react/prop-types
   const shortContent = content.substring(0, 200);
@@ -40,15 +37,11 @@ const Card = ({ blog }) => {
         {/* author */}
         <div className="px-2  flex items-center justify-between">
           <div className="flex items-center">
-            <img
-              className="h-10 w-10 rounded-full"
-              src={user?.photoURL}
-              alt=""
-            />
+            <img className="h-10 w-10 rounded-full" src={host?.image} alt="" />
             <div className="ml-2">
-              <p className="font-bold  text-2xl">Mohon Saha</p>
+              <p className="font-bold  text-2xl">{host?.name}</p>
               <p className="text-sm font-semibold text-slate-600">
-                {published_date}
+                {uploadTime}
               </p>
             </div>
           </div>

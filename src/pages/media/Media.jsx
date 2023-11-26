@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Spinner from "../../components/Spinner";
+import { getAllBlogs } from "../../api/blogs";
 
 const Media = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    fetch("./blog.json")
-      .then((res) => res.json())
+    getAllBlogs()
       .then((data) => {
         setBlogs(data);
         setLoading(false);
