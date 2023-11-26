@@ -15,6 +15,7 @@ const BlogDetails = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [commetns, setComments] = useState([]);
+  const [realTimeComment, setRealTimeComment] = useState(false);
 
   useEffect(() => {
     // setLoading(true);
@@ -26,7 +27,7 @@ const BlogDetails = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [_id]);
+  }, [_id, realTimeComment]);
   console.log(commetns);
 
   const handleSubmitComment = (event) => {
@@ -52,9 +53,11 @@ const BlogDetails = () => {
         setLoading(false);
         Swal.fire({
           title: "Good job!",
-          text: "Posted Successfully",
+          text: "Commented Successfully",
           icon: "success",
         });
+        setRealTimeComment(!realTimeComment);
+        event.target.reset();
       })
       .catch((err) => console.log(err));
   };
@@ -174,6 +177,7 @@ const BlogDetails = () => {
                     type="text"
                     name="comment"
                     id="name"
+                    required
                     placeholder="Enter Your Name Here"
                     className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-gray-400 bg-gray-200 text-gray-900"
                     data-temp-mail-org="0"
@@ -183,7 +187,7 @@ const BlogDetails = () => {
 
               <div className="text-right">
                 <button
-                  // onClick={() => setOpen(false)}
+                  // onClick={() => setRealTimeComment(!realTimeComment)}
                   type="submit"
                   className="bg-slate-500/90  rounded-lg px-3 py-1 text-white"
                 >
