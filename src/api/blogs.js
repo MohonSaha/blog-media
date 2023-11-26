@@ -19,3 +19,11 @@ export const getAllBlogs = async () => {
   const data = await response.json();
   return data;
 };
+
+// Get a blog details
+export const getBlog = async (id) => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/blog/${id}`);
+
+  const data = await response.json();
+  return data;
+};

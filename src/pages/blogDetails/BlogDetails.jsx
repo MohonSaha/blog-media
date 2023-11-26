@@ -3,8 +3,11 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { FaComment, FaShareAltSquare, FaTrash } from "react-icons/fa";
 import { MdEditSquare } from "react-icons/md";
 import { AiFillHeart } from "react-icons/ai";
+import { useLoaderData } from "react-router-dom";
 
 const BlogDetails = () => {
+  const blogDetails = useLoaderData();
+  const { uploadTime, totalReact, image, content, host } = blogDetails;
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   return (
@@ -28,14 +31,14 @@ const BlogDetails = () => {
         <div className="mx-3 flex items-center justify-between">
           <div className="flex items-center">
             <img
-              className="h-12 w-12 rounded-full border-2 border-orange-400"
-              src={user?.photoURL}
+              className="h-14 w-1h-14 rounded-full border-2 borde-orange-400"
+              src={host?.image}
               alt=""
             />
             <div className="ml-2">
-              <p className="font-bold  text-2xl">Mohon Saha</p>
+              <p className="font-bold  text-2xl">{host?.name}</p>
               <p className="text-sm font-semibold text-slate-600">
-                October 6, 2023
+                {uploadTime}
               </p>
             </div>
           </div>
@@ -46,18 +49,12 @@ const BlogDetails = () => {
             </div>
           </div>
         </div>
-
+        {/* text content section */}
         <div className="mx-3">
-          <p>
-            Welcome back to Found, where we get the stories behind the startups.
-            This week, our old friend Darrell Etherington joins Becca Szkutak to
-            talk with Professor Esther Rodriguez-Villegas from Acurable. Welcome
-            back to Found, where we get the stories behind the startups. This
-            week, our old friend Darrell Etherington joins Becca Szkutak to talk
-            with Professor Esther Rodriguez-Villegas from Acurable...
-          </p>
+          <p>{content}</p>
         </div>
         <hr />
+
         <div className="flex justify-between items-center -mt-3 md:mx-8 mx-4">
           <div className="flex items-center cursor-pointer">
             <AiFillHeart

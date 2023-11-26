@@ -56,7 +56,7 @@ const Card = ({ blog }) => {
         <div className="px-2 font-semibol text-sm">
           {shortContent}...{" "}
           <Link
-            to={`/blogs/details/:id`}
+            to={`/blog/${blog._id}`}
             className="text-base font-semibold text-slate-600"
           >
             See more
