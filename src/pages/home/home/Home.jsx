@@ -2,6 +2,7 @@ import { useState } from "react";
 import Media from "../../media/Media";
 import Banner from "../banner/banner";
 import PostBlog from "../postBlog/postBlog";
+import PopularBlog from "../popularBlog/PopularBlog";
 
 const Home = () => {
   const [realTimeComment, setRealTimeComment] = useState(false);
@@ -14,7 +15,7 @@ const Home = () => {
         realTimeComment={realTimeComment}
       />
       <div className="">
-        <Media realTimeComment={realTimeComment}></Media>
+        <PopularBlog realTimeComment={realTimeComment}></PopularBlog>
       </div>
     </div>
   );
