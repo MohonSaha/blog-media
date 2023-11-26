@@ -28,7 +28,6 @@ const BlogDetails = () => {
         console.log(err);
       });
   }, [_id, realTimeComment]);
-  console.log(commetns);
 
   const handleSubmitComment = (event) => {
     event.preventDefault();

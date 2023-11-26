@@ -12,7 +12,7 @@ export const addComment = async (commentData) => {
   return data;
 };
 
-// Get commets
+// Get commets for specific post through post id
 export const getComments = async (id) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/comments/${id}`

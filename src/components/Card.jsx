@@ -3,14 +3,17 @@
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment, FaShareAltSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { addReact } from "../api/react";
+import { addReact, getReacts } from "../api/react";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 // eslint-disable-next-line react/prop-types
 const Card = ({ blog }) => {
   const { uploadTime, totalReact, image, content, host, _id } = blog;
 
   // eslint-disable-next-line react/prop-types
   const shortContent = content.substring(0, 200);
+  const [reactData, setReactData] = useState([]);
+  const [realTimeComment, setRealTimeComment] = useState(false);
 
   const handleLikeButton = (id) => {
     const reactData = {
@@ -26,9 +29,24 @@ const Card = ({ blog }) => {
           text: "Posted Successfully",
           icon: "success",
         });
+        setRealTimeComment(!realTimeComment);
       })
       .catch((err) => console.log(err));
   };
+
+  // get react data
+  useEffect(() => {
+    // setLoading(true);
+    getReacts(_id)
+      .then((data) => {
+        setReactData(data);
+        // setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [_id, realTimeComment]);
+  console.log(reactData);
 
   return (
     <div className="col-span-1 cursor-pointer group bg-white rounded-xl p-2 shadow-lg ring-2 ring-slate-300/20">
@@ -93,7 +111,9 @@ const Card = ({ blog }) => {
               />
             </button>
 
-            <p className="ml-2 font-semibold text-slate-600">5</p>
+            <p className="ml-2 font-semibold text-slate-600">
+              {reactData.length}
+            </p>
           </div>
           <div
             // onClick={() => setOpen(!open)}
