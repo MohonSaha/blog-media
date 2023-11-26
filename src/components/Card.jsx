@@ -91,6 +91,7 @@ const Card = ({ blog }) => {
           </div> */}
         </div>
         {/* content */}
+
         <div className="px-2 font-semibol text-sm">
           {shortContent}...{" "}
           <Link

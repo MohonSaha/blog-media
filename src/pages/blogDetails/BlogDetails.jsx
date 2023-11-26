@@ -95,8 +95,10 @@ const BlogDetails = () => {
           </div>
         </div>
         {/* text content section */}
-        <div className="mx-3">
-          <p>{content}</p>
+        <div className="mx-3 overflow-hidden">
+          {/* <div className=""> */}
+          <div className="whitespace-pre-line">{content}</div>
+          {/* </div> */}
         </div>
         <hr />
 

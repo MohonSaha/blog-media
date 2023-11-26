@@ -3,7 +3,8 @@ import Card from "../../components/Card";
 import Spinner from "../../components/Spinner";
 import { getAllBlogs } from "../../api/blogs";
 
-const Media = () => {
+// eslint-disable-next-line react/prop-types
+const Media = ({ realTimeComment }) => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -16,7 +17,7 @@ const Media = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [realTimeComment]);
 
   if (loading) {
     return <Spinner />;

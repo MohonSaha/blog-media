@@ -5,7 +5,8 @@ import { imageUpload } from "../../../api/imgUpload";
 import { addBlog } from "../../../api/blogs";
 import Swal from "sweetalert2";
 
-const PostBlog = () => {
+// eslint-disable-next-line react/prop-types
+const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
   const { user } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
@@ -60,6 +61,7 @@ const PostBlog = () => {
           text: "Posted Successfully",
           icon: "success",
         });
+        setRealTimeComment(!realTimeComment);
         setLoading(false);
       })
       .catch((err) => {
