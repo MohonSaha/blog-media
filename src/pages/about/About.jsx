@@ -2,12 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { getUser, updateUser } from "../../api/auth";
 import { AuthContext } from "../../providers/AuthProvider";
 import Modal from "../../components/modal/Modal";
-import { setLogLevel } from "firebase/app";
 
 const About = () => {
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -21,7 +19,6 @@ const About = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setLoading(true);
     const form = event.target;
     const name = form.Uname.value;
     const number = form.mobile.value;
@@ -37,7 +34,6 @@ const About = () => {
     };
     console.log(updateUserData);
     updateUser(updateUserData);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -127,7 +123,7 @@ const About = () => {
           openModal={openModal}
           closeModal={closeModal}
           userData={userData}
-          loading={loading}
+          // loading={loading}
         ></Modal>
       )}
     </>

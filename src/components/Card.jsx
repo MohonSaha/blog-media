@@ -46,7 +46,6 @@ const Card = ({ blog }) => {
         console.log(err);
       });
   }, [_id, realTimeComment]);
-  console.log(reactData);
 
   return (
     <div className="col-span-1 cursor-pointer group bg-white rounded-xl p-2 shadow-lg ring-2 ring-slate-300/20">

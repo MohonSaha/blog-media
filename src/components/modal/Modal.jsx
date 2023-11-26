@@ -1,7 +1,5 @@
-import { TbFidgetSpinner } from "react-icons/tb";
-
 // eslint-disable-next-line react/prop-types
-const Modal = ({ openModal, closeModal, handleSubmit, userData, loading }) => {
+const Modal = ({ closeModal, handleSubmit }) => {
   return (
     <div>
       <div className="fixed z-10 inset-0 overflow-y-scroll">
@@ -72,14 +70,7 @@ const Modal = ({ openModal, closeModal, handleSubmit, userData, loading }) => {
                   //   onClick={closeModal}
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                  {loading ? (
-                    <TbFidgetSpinner
-                      size={24}
-                      className="mx-auto animate-spin"
-                    />
-                  ) : (
-                    "Update"
-                  )}
+                  Update
                 </button>
                 <button
                   type="button"

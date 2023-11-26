@@ -14,24 +14,25 @@ const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
   const [loading, setLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Upload Image");
 
-  const openModal = () => {
-    setShowModal(true);
-  };
+  // const openModal = () => {
+  //   setShowModal(true);
+  // };
 
   const closeModal = () => {
     setShowModal(false);
   };
 
   const openModalLoginForLoginUser = () => {
-    if (user) {
+    if (user?.email) {
       setShowModal(true);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Login Blog Media To A Create Post",
+      });
+      navigate("/login");
     }
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Login Blog Media To A Create Post",
-    });
-    navigate("/login");
   };
 
   const handlePostSubmit = (event) => {

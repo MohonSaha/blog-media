@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 const BlogDetails = () => {
   const blogDetails = useLoaderData();
-  const { uploadTime, totalReact, image, content, host, _id } = blogDetails;
+  const { uploadTime, image, content, host, _id } = blogDetails;
   const blogTitle = content.substring(0, 130);
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
