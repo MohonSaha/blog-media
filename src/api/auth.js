@@ -28,3 +28,22 @@ export const getUser = async (user) => {
   const data = await response.json();
   return data;
 };
+
+// /user/update/:email
+
+// update user
+export const updateUser = (updateUserData) => {
+  // fetch method
+  fetch(
+    `${import.meta.env.VITE_API_URL}/user/update/${updateUserData?.email}`,
+    {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(updateUserData),
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+};
