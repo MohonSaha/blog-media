@@ -7,6 +7,7 @@ import Media from "../pages/media/Media";
 import PrivateRoute from "./PrivateRoute";
 import BlogDetails from "../pages/blogDetails/BlogDetails";
 import { getBlog } from "../api/blogs";
+import About from "../pages/about/About";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) => getBlog(params.id),
+      },
+      {
+        path: "/about",
+        element: (
+          <PrivateRoute>
+            <About />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/login",

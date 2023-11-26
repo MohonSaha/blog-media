@@ -4,6 +4,7 @@ export const saveUser = (user) => {
   const currentUser = {
     email: user?.email,
     photo: user?.photoURL,
+    name: user?.displayName,
   };
 
   // fetch method
@@ -16,4 +17,14 @@ export const saveUser = (user) => {
   })
     .then((res) => res.json())
     .then((data) => console.log(data));
+};
+
+// gat current user
+export const getUser = async (user) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/users/${user.email}`
+  );
+
+  const data = await response.json();
+  return data;
 };

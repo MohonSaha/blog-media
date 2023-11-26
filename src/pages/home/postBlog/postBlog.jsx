@@ -4,11 +4,12 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import { imageUpload } from "../../../api/imgUpload";
 import { addBlog } from "../../../api/blogs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
   const { user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Upload Image");
@@ -19,6 +20,18 @@ const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const openModalLoginForLoginUser = () => {
+    if (user) {
+      setShowModal(true);
+    }
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Login Blog Media To A Create Post",
+    });
+    navigate("/login");
   };
 
   const handlePostSubmit = (event) => {
@@ -87,7 +100,7 @@ const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
             <input
               type="search"
               readOnly
-              onClick={openModal}
+              onClick={openModalLoginForLoginUser}
               placeholder={`What's on your mind ${user?.displayName} ?`}
               className="text-left w-full px-3 py-2 border rounded-full border-gray-300 focus:outline-gray-400 bg-gray-200 text-gray-900 cursor-pointer"
               data-temp-mail-org="0"
