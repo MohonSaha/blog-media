@@ -1,30 +1,73 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { FaComment, FaShareAltSquare, FaTrash } from "react-icons/fa";
 import { MdEditSquare } from "react-icons/md";
 import { AiFillHeart } from "react-icons/ai";
 import { useLoaderData } from "react-router-dom";
+import { addComment, getComments } from "../../api/comments";
+import Swal from "sweetalert2";
 
 const BlogDetails = () => {
   const blogDetails = useLoaderData();
-  const { uploadTime, totalReact, image, content, host } = blogDetails;
+  const { uploadTime, totalReact, image, content, host, _id } = blogDetails;
+  const blogTitle = content.substring(0, 130);
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [commetns, setComments] = useState([]);
+
+  useEffect(() => {
+    // setLoading(true);
+    getComments(_id)
+      .then((data) => {
+        setComments(data);
+        // setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [_id]);
+  console.log(commetns);
+
+  const handleSubmitComment = (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const target = event.target;
+    const comment = target.comment.value;
+    const commentData = {
+      comment,
+      uploadTime: new Date(),
+      host: {
+        name: user?.displayName,
+        image: user?.photoURL,
+        email: user?.email,
+      },
+      blogId: _id,
+    };
+
+    // post comment data in the server
+    addComment(commentData)
+      .then((data) => {
+        console.log(data);
+        setLoading(false);
+        Swal.fire({
+          title: "Good job!",
+          text: "Posted Successfully",
+          icon: "success",
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="px-4 md:px-32 bg-slate-200/40 py-32">
       <div className="flex flex-col gap-6 bg-white shadow-xl  p-3 rounded-xl ring-2 ring-slate-200">
         <div>
-          <h1 className="md:text-3xl text-2xl font-bold">
-            Making wearable medical devices more patient-friendly with Professor
-            Esther Rodriguez-Villegas from Acurable
-          </h1>
+          <h1 className="md:text-3xl text-2xl font-bold">{blogTitle}...</h1>
         </div>
+        {/* content image */}
         <div className="w-full md:h-[80vh] overflow-hidden rounded-xl">
-          <img
-            src="https://i.ibb.co/y6djLdZ/dumbbells-2465478-1280.jpg"
-            alt=""
-            className=" w-full h-[100%] object-center"
-          />
+          <img src={image} alt="" className=" w-full h-[100%] object-center" />
         </div>
 
         {/* User section */}
@@ -76,10 +119,28 @@ const BlogDetails = () => {
           </div>
         </div>
 
-        {/* Comment box */}
+        {/* Comment box with all comments */}
         <div className={`${open ? "blcok" : "hidden"}`}>
           <div className="mb-3 text-slate-600 space-y-3">
-            <div className="flex items-center gap-3">
+            {commetns.map((text) => (
+              <>
+                <div key={text?._id} className="flex items-center gap-3">
+                  <img
+                    className="h-8 w-8 rounded-full border-2"
+                    src={text?.host?.image}
+                    alt=""
+                  />
+                  <p>
+                    <span className="font-semibold text-slate-800">
+                      {text?.host?.name}:
+                    </span>{" "}
+                    {text?.comment}
+                  </p>
+                </div>
+              </>
+            ))}
+
+            {/* <div className="flex items-center gap-3">
               <img
                 className="h-8 w-8 rounded-full border-2"
                 src={user?.photoURL}
@@ -89,20 +150,10 @@ const BlogDetails = () => {
                 <span className="font-semibold">Mohon Saha:</span> This is
                 really a awesome post
               </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <img
-                className="h-8 w-8 rounded-full border-2"
-                src={user?.photoURL}
-                alt=""
-              />
-              <p>
-                <span className="font-semibold">Mohon Saha:</span> This is
-                really a awesome post
-              </p>
-            </div>
+            </div> */}
           </div>
-          {/* User comment box */}
+
+          {/* User upload comment box */}
           <div className="  flex">
             <div className="w-14">
               <img
@@ -115,14 +166,13 @@ const BlogDetails = () => {
               noValidate=""
               action=""
               className="w-full space-y-3 ng-untouched ng-pristine ng-valid"
-              //   onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmitComment}
             >
               <div className="space-y-2">
                 <div>
                   <textarea
                     type="text"
-                    name="name"
-                    // {...register("name", { required: true })}
+                    name="comment"
                     id="name"
                     placeholder="Enter Your Name Here"
                     className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-gray-400 bg-gray-200 text-gray-900"
@@ -133,7 +183,7 @@ const BlogDetails = () => {
 
               <div className="text-right">
                 <button
-                  onClick={() => setOpen(false)}
+                  // onClick={() => setOpen(false)}
                   type="submit"
                   className="bg-slate-500/90  rounded-lg px-3 py-1 text-white"
                 >

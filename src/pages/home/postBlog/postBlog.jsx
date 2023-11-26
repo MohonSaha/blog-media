@@ -3,6 +3,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { imageUpload } from "../../../api/imgUpload";
 import { addBlog } from "../../../api/blogs";
+import Swal from "sweetalert2";
 
 const PostBlog = () => {
   const { user } = useContext(AuthContext);
@@ -54,6 +55,11 @@ const PostBlog = () => {
           setLoading(false);
           closeModal(); // Close the modal after successful submission
         }, 200);
+        Swal.fire({
+          title: "Good job!",
+          text: "Posted Successfully",
+          icon: "success",
+        });
         setLoading(false);
       })
       .catch((err) => {

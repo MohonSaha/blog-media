@@ -78,7 +78,7 @@ const Card = ({ blog }) => {
           >
             <FaComment size={20} className="fill-slate-500/90" />
             <Link
-              to={`/blogs/details/:id`}
+              to={`/blog/${blog._id}`}
               className="ml-2 font-semibold text-slate-600"
             >
               Comment
