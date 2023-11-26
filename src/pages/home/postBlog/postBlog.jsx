@@ -126,12 +126,10 @@ const PostBlog = () => {
                           className="text-lg leading-6 font-medium text-gray-900"
                           id="modal-headline"
                         >
-                          Mohon Saha
+                          {user?.displayName}
                         </h3>
-                        <div className="mt-2">
-                          <p className="text-sm text-gray-500">
-                            Modal content goes here.
-                          </p>
+                        <div className="mt-">
+                          <p className="text-sm text-gray-500">26-11-2023</p>
                         </div>
 
                         {/* start post form */}

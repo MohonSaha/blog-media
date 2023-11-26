@@ -3,12 +3,32 @@
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment, FaShareAltSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { addReact } from "../api/react";
+import Swal from "sweetalert2";
 // eslint-disable-next-line react/prop-types
 const Card = ({ blog }) => {
-  const { uploadTime, totalReact, image, content, host } = blog;
+  const { uploadTime, totalReact, image, content, host, _id } = blog;
 
   // eslint-disable-next-line react/prop-types
   const shortContent = content.substring(0, 200);
+
+  const handleLikeButton = (id) => {
+    const reactData = {
+      blogId: id,
+      host,
+    };
+    console.log(reactData);
+    addReact(reactData)
+      .then((data) => {
+        console.log(data);
+        Swal.fire({
+          title: "Good job!",
+          text: "Posted Successfully",
+          icon: "success",
+        });
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="col-span-1 cursor-pointer group bg-white rounded-xl p-2 shadow-lg ring-2 ring-slate-300/20">
@@ -62,14 +82,17 @@ const Card = ({ blog }) => {
             See more
           </Link>
         </div>
-        {/* reaction  */}
+        {/* reactions  */}
         <hr />
         <div className="flex justify-between items-center  md:mx- mx-2">
           <div className="flex items-center cursor-pointer">
-            <AiFillHeart
-              size={24}
-              className="fill-slate-500/90 outline-2 hover:fill-orange-600"
-            />
+            <button type="submit" onClick={() => handleLikeButton(_id)}>
+              <AiFillHeart
+                size={24}
+                className="fill-slate-500/90 outline-2 hover:scale-110 hover:fill-orange-600"
+              />
+            </button>
+
             <p className="ml-2 font-semibold text-slate-600">5</p>
           </div>
           <div
