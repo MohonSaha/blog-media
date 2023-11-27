@@ -1,11 +1,13 @@
 // funcion to save user in mongodb
 
 export const saveUser = (user) => {
+  const name = user?.name;
   const currentUser = {
     email: user?.email,
     photo: user?.photoURL,
-    name: user?.displayName,
+    name: name,
   };
+  console.log(currentUser);
 
   // fetch method
   fetch(`${import.meta.env.VITE_API_URL}/users/${user?.email}`, {

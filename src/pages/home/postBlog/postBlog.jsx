@@ -90,7 +90,7 @@ const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
 
   return (
     <>
-      <div className="px-4 md:px-32 bg-slate-200/40 py-10 ">
+      <div className="px-4 md:px-32 bg-slate-300/40 py-10 ">
         <div className="bg-white md:py-8 py-5 md:px-16 px-8 rounded-lg shadow-lg ring-2 ring-slate-400/50">
           <div className="flex gap-4">
             <img
@@ -102,7 +102,9 @@ const PostBlog = ({ setRealTimeComment, realTimeComment }) => {
               type="search"
               readOnly
               onClick={openModalLoginForLoginUser}
-              placeholder={`What's on your mind ${user?.displayName} ?`}
+              placeholder={`What's on your mind ${
+                user ? user?.displayName : "dear"
+              } ?`}
               className="text-left w-full px-3 py-2 border rounded-full border-gray-300 focus:outline-gray-400 bg-gray-200 text-gray-900 cursor-pointer"
               data-temp-mail-org="0"
             />
