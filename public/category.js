@@ -21,6 +21,9 @@ export const categories = [
     label: "Bangladesh",
   },
   {
-    label: "international",
+    label: "International",
+  },
+  {
+    label: "Others",
   },
 ];

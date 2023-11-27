@@ -26,7 +26,7 @@ const PopularBlog = ({ realTimeComment }) => {
 
   return (
     <div className="px-4 md:px-32 pt-8 pb-16 bg-slate-300/40">
-      <div className="mb-">
+      <div className="m">
         <div className="">
           <h1 className="text-7xl text-center font-bold text-slate-400/50">
             Connect The World

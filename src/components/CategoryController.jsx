@@ -1,8 +1,36 @@
 import { useState } from "react";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { categories } from "../../public/category";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import qs from "query-string";
 
-const CategoryController = () => {
+const CategoryController = ({ pageUrl }) => {
+  const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const handleSelectCategory = (label) => {
+    let currentQuery = {};
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+    const updatedQuery = {
+      ...currentQuery,
+      category: label,
+    };
+
+    // create the url for browser
+    const url = qs.stringifyUrl(
+      {
+        url: `${pageUrl}`,
+        query: updatedQuery,
+      },
+      { skipNull: true }
+    );
+
+    // push the url in browser
+    navigate(url);
+  };
+
   const [open, setOpen] = useState(true);
   return (
     <div className="bg-transparent">
@@ -39,7 +67,10 @@ const CategoryController = () => {
               }`}
             >
               {categories.map((item, index) => (
-                <div key={index}>
+                <div
+                  onClick={() => handleSelectCategory(item.label)}
+                  key={index}
+                >
                   <pre className="font-semibold text-slate-600 md:cursor-pointer cursor-default">
                     {item.label}
                   </pre>
